@@ -1,6 +1,7 @@
 package relay
 
 import (
+	"fmt"
 	"net"
 	"regexp"
 
@@ -71,6 +72,7 @@ func AssumeRoleAWS(roleArn string) *session.Session {
 	var creds *credentials.Credentials
 	sess := session.Must(session.NewSession())
 	if regexp.MustCompile(`^arn:aws:iam::(.+):role/([^/]+)(/.+)?$`).MatchString(roleArn) {
+		fmt.Println("Assuming Role ", roleArn)
 		creds = stscreds.NewCredentials(sess, roleArn)
 		return session.Must(session.NewSession(&aws.Config{Credentials: creds}))
 	} else {
